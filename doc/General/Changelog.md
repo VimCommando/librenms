@@ -86,9 +86,6 @@ source: General/Changelog.md
 * Added support for skipping snmp check on edit snmp page for devices ([#4896](https://github.com/librenms/librenms/issues/4896))
 * Update wifi_clients graph ([#4846](https://github.com/librenms/librenms/issues/4846))
 * Further decouple the avail-map page from the widget ([#4887](https://github.com/librenms/librenms/issues/4887))
-
----
-
 ## v1.21
 *(2016-10-30)*
 
