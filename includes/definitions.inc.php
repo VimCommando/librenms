@@ -3120,6 +3120,11 @@ $config['graph_types']['device']['pulse_sessions']['section']      = 'firewall';
 $config['graph_types']['device']['pulse_sessions']['order']        = '0';
 $config['graph_types']['device']['pulse_sessions']['descr']        = 'Active Sessions';
 
+//RouterOS Graphs
+$config['graph_types']['device']['mtxr_hotspot_users']['section']         = 'system';
+$config['graph_types']['device']['mtxr_hotspot_users']['order']           = '0';
+$config['graph_types']['device']['mtxr_hotspot_users']['descr']           = 'Active Hotspot Users';
+
 // Infoblox dns/dhcp Graphs
 $config['graph_types']['device']['ib_dns_dyn_updates']['section']             = 'dns';
 $config['graph_types']['device']['ib_dns_dyn_updates']['order']               = '0';
