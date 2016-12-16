@@ -23,4 +23,3 @@ if (is_numeric($hotspotUsers)) {
     data_update($device, 'mtxr_hotspot_users', $tags, $fields);
     $graphs['mtxr_hotspot_users'] = true;
 }
-

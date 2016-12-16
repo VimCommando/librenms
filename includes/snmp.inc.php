@@ -295,20 +295,20 @@ function snmp_table($device, $oid, $options = '-Cb', $mib = null, $mibdir = null
     if (is_string($data) && (preg_match('/(No Such Instance|No Such Object|No more variables left|Authentication failure)/i', $data))) {
         return false;
     } elseif ($data || $data === '0') {
-        $data = explode("\n", $data); 
+        $data = explode("\n", $data);
         // populate some meta-data
         $meta = explode("::", $data[0]);
         $table = array(
-            'mib' => substr(strrchr($meta[0],' '), 1),
+            'mib' => substr(strrchr($meta[0], ' '), 1),
             'oid' => $meta[1]
         );
         // extract header names from row 2
-        $oids = explode(',',$data[2]);
+        $oids = explode(',', $data[2]);
         // row one is the requested MIB, row 2 is blank
-        foreach(array_splice($data, 3) as $rId => $row) {
+        foreach (array_splice($data, 3) as $rId => $row) {
             // turn the row into an array
             $cells = explode(',', $row);
-            foreach($oids as $cId => $oid) {
+            foreach ($oids as $cId => $oid) {
                 // assign each cell value keyed by it's header name
                 // so values are available by $table[0]['name']
                 $table[$rId][$oid] = $cells[$cId];
