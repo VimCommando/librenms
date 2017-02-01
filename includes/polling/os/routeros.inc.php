@@ -9,7 +9,7 @@ $features = 'Level '.trim(snmp_get($device, 'MIKROTIK-MIB::mtxrLicLevel.0', '-OQ
 
 $serial = snmp_get($device, 'MIKROTIK-MIB::mtxrSerialNumber.0', '-OQv');
 
-$hotspotUsersTable = snmp_table($device, 'MIKROTIK-MIB::mtxrHotspotActiveUsersTable');
+$hotspotUsersTable = snmp_table($device, 'MIKROTIK-MIB::mtxrHotspotActiveUsersTable', '-Cb');
 $hotspotUsers = count($hotspotUsersTable);
 
 # $hotspotUsersTable = snmp_walk($device, 'MIKROTIK-MIB::mtxrHotspotActiveUsersTable', '-OQv');
