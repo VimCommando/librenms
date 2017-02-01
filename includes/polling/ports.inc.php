@@ -127,13 +127,14 @@ echo 'Caching Oids: ';
 if ($device['os'] === 'f5' && (version_compare($device['version'], '11.2.0', '>=') && version_compare($device['version'], '11.7', '<'))) {
     require_once 'ports/f5.inc.php';
 } else {
-    if (!in_array($device['hardware'], $config['os'][$device['os']]['bad_ifXEntry'])) {
-        #$port_stats = snmptable_cache_oid($device, 'ifXTable', $port_stats, 'IF-MIB');
-        #if($port_stats == false) {
+    if (!in_array(strtolower($device['hardware']), array_map('strtolower', $config['os'][$device['os']]['bad_ifXEntry']))) {
+        $port_stats = snmptable_cache_oid($device, 'ifXTable', $port_stats, 'IF-MIB');
+        if($port_stats == false) {
             $port_stats = snmpwalk_cache_oid($device, 'ifXEntry', $port_stats, 'IF-MIB');
-        #}
+        }
     }
-    #$port_stats = snmptable_cache_oid($device, 'ifTable', $port_stats, 'IF-MIB');
+    $port_stats = snmptable_cache_oid($device, 'ifTable', $port_stats, 'IF-MIB');
+    /*
     $hc_test = array_slice($port_stats, 0, 1);
     if (!isset($hc_test[0]['ifHCInOctets']) && !is_numeric($hc_test[0]['ifHCInOctets'])) {
         $port_stats = snmpwalk_cache_oid($device, 'ifEntry', $port_stats, 'IF-MIB', null, '-OQUst');
@@ -143,6 +144,7 @@ if ($device['os'] === 'f5' && (version_compare($device['version'], '11.2.0', '>=
             $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, 'IF-MIB', null, '-OQUst');
         }
     }
+    */
 }
 
 if ($config['enable_ports_etherlike']) {
@@ -459,6 +461,11 @@ foreach ($ports as $port) {
             d_echo('Using ifDescr as ifAlias');
         }
 
+        if ($this_port['ifName'] == '' || $this_port['ifName'] == null) {
+            $this_port['ifName'] = $this_port['ifDescr'];
+            d_echo('Using ifDescr as ifName');
+        }
+
         // Update IF-MIB data
         $tune_port = false;
         foreach ($data_oids as $oid) {
@@ -552,7 +559,7 @@ foreach ($ports as $port) {
             }
 
             if ($config['slow_statistics'] == true) {
-                $port[$port_update][$oid]         = $this_port[$oid];
+                $port[$port_update][$oid]         = set_numeric($this_port[$oid]);
                 $port[$port_update][$oid.'_prev'] = $port[$oid];
             }
 
