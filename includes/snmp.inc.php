@@ -291,24 +291,17 @@ function snmp_table($device, $oid, $options = null, $mib = null, $mibdir = null)
     } elseif ($data || $data === '0') {
         $data = explode("\n", $data);
         $table = array();
-        // populate some meta-data
-        /*
-        $meta = explode("::", $data[0]);
-        $table = array(
-            'mib' => substr(strrchr($meta[0], ' '), 1),
-            'oid' => $meta[1]
-        );
-        */
-        // extract header names from row 2
+        // Data headers are on row 2
         $oids = explode(',', $data[2]);
-        // row 0 is the requested MIB, row 1 is blank
+        // Row 0 is the requested MIB, row 1 is blank
         foreach (array_splice($data, 3) as $row) {
             $cells = explode(',', $row);
             foreach ($oids as $columnId => $oid) {
                 // assign each cell value keyed to it's header name
                 // so values are available by $table[row]['name']
-                if($oid != 'index')
+                if ($oid != 'index') {
                     $table[$cells[0]][$oid] = $cells[$columnId];
+                }
             }
         }
         return $table;
@@ -420,13 +413,13 @@ function snmpwalk_cache_oid($device, $oid, $array, $mib = null, $mibdir = null, 
 function snmptable_cache_oid($device, $oid, $array, $mib = null, $mibdir = null, $snmpflags = '')
 {
     $data = snmp_table($device, $oid, $snmpflags, $mib, $mibdir);
-    if($data == false) {
+    if ($data == false) {
         return $array;
     }
-    if(!isset($array) || $array == false) {
+    if (!isset($array) || $array == false) {
         return $data;
     }
-    foreach($data as $index => $row) {
+    foreach ($data as $index => $row) {
         $array[$index] = $array[$index] + $row;
     }
     return $array;

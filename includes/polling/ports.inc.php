@@ -129,7 +129,7 @@ if ($device['os'] === 'f5' && (version_compare($device['version'], '11.2.0', '>=
 } else {
     if (!in_array(strtolower($device['hardware']), array_map('strtolower', $config['os'][$device['os']]['bad_ifXEntry']))) {
         $port_stats = snmptable_cache_oid($device, 'ifXTable', $port_stats, 'IF-MIB');
-        if($port_stats == false) {
+        if ($port_stats == false) {
             $port_stats = snmpwalk_cache_oid($device, 'ifXEntry', $port_stats, 'IF-MIB');
         }
     }
