@@ -128,25 +128,25 @@ if ($device['os'] === 'f5' && (version_compare($device['version'], '11.2.0', '>=
     require_once 'ports/f5.inc.php';
 } else {
     if (!in_array(strtolower($device['hardware']), array_map('strtolower', $config['os'][$device['os']]['bad_ifXEntry']))) {
-        if ($config[$device['os']]['ports_snmptable']) {
+        if ($config[$device['os']]['ports_snmptable'] || $config['ports_snmptable']) {
             $port_stats = snmptable_cache_oid($device, 'ifXTable', $port_stats, 'IF-MIB');
         }
         if (!isset($port_stats) || $port_stats == false) {
             $port_stats = snmpwalk_cache_oid($device, 'ifXEntry', $port_stats, 'IF-MIB');
         }
     }
-    if($config[$device['os']]['ports_snmptable']) {
-      $port_stats = snmptable_cache_oid($device, 'ifTable', $port_stats, 'IF-MIB');
+    if ($config[$device['os']]['ports_snmptable'] || $config['ports_snmptable']) {
+        $port_stats = snmptable_cache_oid($device, 'ifTable', $port_stats, 'IF-MIB');
     } else {
-      $hc_test = array_slice($port_stats, 0, 1);
-      if (!isset($hc_test[0]['ifHCInOctets']) && !is_numeric($hc_test[0]['ifHCInOctets'])) {
-          $port_stats = snmpwalk_cache_oid($device, 'ifEntry', $port_stats, 'IF-MIB', null, '-OQUst');
-      } else {
-          foreach ($ifmib_oids as $oid) {
-              echo "$oid ";
-              $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, 'IF-MIB', null, '-OQUst');
-          }
-      }
+        $hc_test = array_slice($port_stats, 0, 1);
+        if (!isset($hc_test[0]['ifHCInOctets']) && !is_numeric($hc_test[0]['ifHCInOctets'])) {
+            $port_stats = snmpwalk_cache_oid($device, 'ifEntry', $port_stats, 'IF-MIB', null, '-OQUst');
+        } else {
+            foreach ($ifmib_oids as $oid) {
+                echo "$oid ";
+                $port_stats = snmpwalk_cache_oid($device, $oid, $port_stats, 'IF-MIB', null, '-OQUst');
+            }
+        }
     }
 }
 
